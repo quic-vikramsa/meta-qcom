@@ -1,0 +1,46 @@
+From 8878ab45f637466268adc592bb52f12857ec2c8c Mon Sep 17 00:00:00 2001
+From: Vikram Sharma <vikramsa@qti.qualcomm.com>
+Date: Sun, 1 Mar 2026 16:34:44 +0530
+Subject: [PATCH] msm: camera: cpas: Update cpas registers to default
+ values
+
+Update CPAS Registers to default values.
+
+Upstream-Status: Pending
+---
+ camera/drivers/cam_cpas/cpas_top/cam_cpastop_hw.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/camera/drivers/cam_cpas/cpas_top/cam_cpastop_hw.c b/camera/drivers/cam_cpas/cpas_top/cam_cpastop_hw.c
+index 4561abcf..9907de72 100644
+--- a/camera/drivers/cam_cpas/cpas_top/cam_cpastop_hw.c
++++ b/camera/drivers/cam_cpas/cpas_top/cam_cpastop_hw.c
+@@ -1397,6 +1397,9 @@ static int cam_cpastop_init_hw_version(struct cam_hw_info *cpas_hw,
+ 	struct cam_cpas_hw_caps *hw_caps)
+ {
+ 	int rc = 0;
++	int i;
++	void *sec_reg;
++	uint32_t val;
+ 	struct cam_hw_soc_info *soc_info = &cpas_hw->soc_info;
+ 	struct cam_cpas *cpas_core = (struct cam_cpas *) cpas_hw->core_info;
+ 	struct cam_cpas_cesta_info *cesta_info = NULL;
+@@ -1405,7 +1408,14 @@ static int cam_cpastop_init_hw_version(struct cam_hw_info *cpas_hw,
+ 	qchannel_info = NULL;
+ 	cpas_top_info = NULL;
+ 
+-	CAM_DBG(CAM_CPAS,
++        sec_reg = ioremap(0xac30000, 0x28);
++        for (i = 0; i <= 0x24; i = i+4) {
++                val = cam_io_r_mb(sec_reg + i);
++                CAM_INFO(CAM_CPAS, "cpas sec reg 0x%x 0x%x", sec_reg + i, val);
++                cam_io_w_mb(0, sec_reg + i);
++        }
++
++	CAM_INFO(CAM_CPAS,
+ 		"hw_version=0x%x Camera Version %d.%d.%d, cpas version %d.%d.%d",
+ 		soc_info->hw_version,
+ 		hw_caps->camera_version.major,
+-- 
+2.34.1
+

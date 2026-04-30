@@ -7,6 +7,10 @@ SRC_URI = " \
     git://github.com/qualcomm-linux/camera-driver.git;protocol=https;branch=camera-kernel.qclinux.0.0;tag=v${PV} \
 "
 
+SRC_URI:append:qcom = " \
+    file:0001-msm-camera-cpas-Update-cpas_sec-registers-to-default.patch\
+"
+
 SRCREV = "3dac889d25682686d5d6990b0a62e4cd699c8cd9"
 
 inherit module
